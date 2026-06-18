@@ -60,7 +60,7 @@ router.post(
       .isIn(["student", "parent"])
       .withMessage("Role must be student or parent"),
     body("grade")
-      .optional()
+      .optional({ nullable: true, checkFalsy: true })
       .isIn(GRADES)
       .withMessage(`Grade must be one of: ${GRADES.join(", ")}`),
     body("subjects")

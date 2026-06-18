@@ -19,16 +19,25 @@ const quizRoutes = require("./routes/quizRoutes");
 const progressRoutes = require("./routes/progressRoutes");
 const aiRoutes = require("./routes/aiRoutes");
 const reportRoutes = require("./routes/reportRoutes");
-
+const subscriptionRoutes = require("./routes/subscriptionRoutes");
+const { handleStripeWebhook } = require("./controllers/subscriptionController");
 const app = express();
 
 // ---- Core middleware ----
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: [
+      "http://localhost:3000",
+      "https://edu-coach-ai-ai-children-mentor.vercel.app",
+    ],
     credentials: true,
   })
+);
+app.post(
+  "/api/subscriptions/webhook",
+  express.raw({ type: "application/json" }),
+  handleStripeWebhook
 );
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -58,6 +67,7 @@ app.use("/api/quizzes", quizRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api/ai", aiRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/subscriptions", subscriptionRoutes);
 
 // ---- Error handling (must be last) ----
 app.use(notFound);

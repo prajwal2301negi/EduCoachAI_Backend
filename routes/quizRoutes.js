@@ -41,6 +41,7 @@ const { body, param } = require("express-validator");
 const { startQuiz, submitQuiz, getQuizHistory } = require("../controllers/quizController");
 const { protect, authorize } = require("../middleware/authMiddleware");
 const validateRequest = require("../middleware/validateRequest");
+const requireSubscription = require("../middleware/requireSubscription");
 
 const router = express.Router();
 
@@ -48,6 +49,7 @@ router.post(
   "/start",
   protect,
   authorize("student"),
+  requireSubscription,
   [
     body("subject").trim().notEmpty().withMessage("Subject is required"),
     body("topic").trim().notEmpty().withMessage("Topic is required"),

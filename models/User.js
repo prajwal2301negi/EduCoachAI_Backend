@@ -61,6 +61,15 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    subscriptionStatus: {
+      type: String,
+      enum: ["none", "active", "expired"],
+      default: "none",
+    },
+    subscriptionEndDate: {
+      type: Date,
+      default: null,
+    },
     lastLogin: {
       type: Date,
       default: null,
